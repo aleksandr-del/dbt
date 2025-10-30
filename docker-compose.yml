@@ -1,3 +1,15 @@
+x-logging: &logging
+  driver: "json-file"
+  options:
+    max-size: 10m
+    max-file: 3
+    compress: "true"
+
+x-labels: &labels
+  - "project=dbt"
+  - "environment=dev"
+
+
 services:
   postgres:
     image: postgres:17-alpine
@@ -24,14 +36,8 @@ services:
       timeout: 5s
       retries: 3
     logging:
-      driver: "json-file"
-      options:
-        max-size: 10m
-        max-file: 3
-        compress: "true"
-    labels:
-      - "project=dbt"
-      - "environment=dev"
+      <<: *logging
+    labels: *labels
 
   pgadmin:
     image: dpage/pgadmin4:latest
@@ -50,9 +56,9 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-    labels:
-      - "project=dbt"
-      - "environment=dev"
+    logging:
+      <<: *logging
+    labels: *labels
 
 
 volumes:
