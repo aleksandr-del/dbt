@@ -39,6 +39,24 @@ services:
       <<: *logging
     labels: *labels
 
+  dbt:
+    image: ghcr.io/dbt-labs/dbt-postgres:latest
+    container_name: dbt
+    env_file:
+      - .env
+    volumes:
+      - ${DBT_HOST_PROJECT_DIR}:${DBT_WORKDIR}
+      - ${DBT_HOST_PROFILES_FILE}:/root/.dbt/profiles.yml
+    working_dir: ${DBT_WORKDIR}
+    networks:
+      - dbt-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+    logging:
+      <<: *logging
+    labels: *labels
+
   pgadmin:
     image: dpage/pgadmin4:latest
     container_name: pg_admin
