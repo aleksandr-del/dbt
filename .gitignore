@@ -5,3 +5,4 @@ test_dbt_project/test_dbt_project/target/
 test_dbt_project/test_dbt_project/dbt_packages/
 test_dbt_project/logs/
 test_dbt_project/test_dbt_project/logs/
+initdb/*.csv
