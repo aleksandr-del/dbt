@@ -1,0 +1,18 @@
+version: 2
+
+models:
+    - name: order_counts_model
+      description: "Aggregates order counts by hour of day from raw orders data"
+      columns:
+          - name: "order_hour_of_day"
+            description: "Hour of the day when orders were placed (0-23)"
+            tests:
+                - not_null
+                - accepted_values:
+                      values: "{{ range(24) | list }}"
+          - name: "order_count"
+            description: "Total number of orders placed during each hour of day"
+            tests:
+                - not_null
+                - expression_is_true:
+                      expresion: ">= 0"
