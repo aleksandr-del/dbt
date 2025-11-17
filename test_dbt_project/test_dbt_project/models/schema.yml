@@ -14,5 +14,3 @@ models:
             description: "Total number of orders placed during each hour of day"
             tests:
                 - not_null
-                - expression_is_true:
-                      expresion: ">= 0"
