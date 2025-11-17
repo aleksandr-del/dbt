@@ -1,0 +1,8 @@
+with order_counts as (
+	select 
+		order_hour_of_day,
+		count(*) order_count
+	from raw.orders
+	group by order_hour_of_day
+	order by order_hour_of_day asc)
+select * from order_counts
