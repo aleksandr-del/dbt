@@ -165,4 +165,4 @@ Start by modifying files in `test_dbt_project/test_dbt_project/models/` or creat
 Configure database connection and ports in `.env`:
 - `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB`
 - `POSTGRES_PORT`, `PGADMIN_PORT`, `DBT_POSTGRES_PORT`
-- `DBT_HOST_PROJECT_DIR`, `DBT_HOST_PROFILES_FILE`, `DBT_WORKDIR`, `DBT_SERVER_HOST`
+- `DBT_HOST_PROJECT_DIR`, `DBT_HOST_PROFILES_FILE`, `DBT_WORKDIR`, `DBT_SERVER_PORT`
