@@ -14,3 +14,17 @@ models:
             description: "Total number of orders placed during each hour of day"
             tests:
                 - not_null
+
+    - name: avg_product_cnt_model
+      description: "Average product counts per order by hour of day from raw orders and order_product data"
+      columns:
+          - name: "order_hour_of_day"
+            description: "Hour fo the day when orders were placed (0-23)"
+            tests:
+                - not_null
+                - accepted_values:
+                      values: "{{ range(24) | list }}"
+          - name: "average_product_count_per_order"
+            description: "Average product count per order by hour of day"
+            tests:
+                - not_null
