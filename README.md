@@ -41,8 +41,18 @@ The dataset is automatically loaded into a `raw` schema with proper relationship
 ## Services
 
 - **PostgreSQL 17**: Main database (port 5433)
-- **dbt-postgres**: dbt transformation engine
+- **dbt-postgres**: dbt transformation engine (port 8080 for docs server)
 - **pgAdmin**: Database management interface (port 5050)
+
+### dbt Service Configuration
+
+The dbt service has been customized to run continuously in the background:
+
+- **Entrypoint Override**: Changed from the default `dbt` entrypoint to `/bin/sh -c` to allow custom commands
+- **Command**: Uses `tail -f /dev/null` to keep the container running indefinitely without consuming resources
+- **Port Mapping**: Exposes port 8080 for the dbt documentation web server
+
+This configuration allows you to execute dbt commands on-demand via `docker exec` while keeping the container available for interactive use and documentation serving.
 
 ## Quick Start
 
@@ -50,15 +60,15 @@ The dataset is automatically loaded into a `raw` schema with proper relationship
    ```bash
    ./download-instacart-data.sh
    ```
+   
+2. **Start the services:**
+    ```bash
+    docker compose up --detach
+    ```
 
-2. **Initialize dbt project (if needed):**
+3. **Initialize dbt project (if needed):**
    ```bash
-   docker compose run --rm dbt init test_dbt_project
-   ```
-
-3. **Start the services:**
-   ```bash
-   docker compose up --detach
+   docker container exec --tty --interactive dbt dbt init test_dbt_project
    ```
 
 The PostgreSQL container will automatically:
@@ -72,25 +82,49 @@ The PostgreSQL container will automatically:
 ### Build Models
 Compiles and executes all dbt models, creating tables and views in PostgreSQL according to your model definitions:
 ```bash
-docker compose run --rm dbt run --project-dir /usr/app/test_dbt_project
+docker container exec --tty --interactive dbt dbt run --project-dir /usr/app/test_dbt_project
 ```
 
 ### Run Tests
 Executes all configured data quality tests (uniqueness, null checks, data consistency). Tests validate data without modifying it:
 ```bash
-docker compose run --rm dbt test --project-dir /usr/app/test_dbt_project
+docker container exec --tty --interactive dbt dbt test --project-dir /usr/app/test_dbt_project
 ```
 
 ### Full Refresh
 Drops and recreates all tables/materialized views instead of incremental updates. Useful after major model changes:
 ```bash
-docker compose run --rm dbt run --project-dir /usr/app/test_dbt_project --full-refresh
+docker container exec --tty --interactive dbt dbt run --project-dir /usr/app/test_dbt_project --full-refresh
 ```
 
 ### Interactive Shell
 Access the dbt container for debugging, running multiple commands, or exploring the environment:
 ```bash
-docker compose run --rm --entrypoint /bin/bash dbt
+docker container exec --tty --interactive dbt /bin/bash
+```
+
+### Compile a Model
+Compiles a specific model into SQL without executing it. Useful for debugging and validating SQL syntax before running:
+```bash
+docker container exec --tty --interactive dbt dbt compile --project-dir /usr/app/test_dbt_project --select models/model.sql
+```
+
+### Run a Specific Model
+Executes a single compiled model instead of all models. Faster for iterative development and testing individual transformations:
+```bash
+docker container exec --tty --interactive dbt dbt run --project-dir /usr/app/test_dbt_project --select models/model.sql
+```
+
+### Generate Documentation
+Generates project documentation including model lineage, column descriptions, and data flow diagrams. Creates static HTML files:
+```bash
+docker container exec --tty --interactive dbt dbt docs generate --project-dir /usr/app/test_dbt_project
+```
+
+### Serve Documentation
+Starts a local web server to view generated documentation in your browser. Access at http://localhost:8080:
+```bash
+docker container exec --tty --interactive dbt dbt docs serve --project-dir /usr/app/test_dbt_project --host 0.0.0.0
 ```
 
 ## Database Access
@@ -131,4 +165,4 @@ Start by modifying files in `test_dbt_project/test_dbt_project/models/` or creat
 Configure database connection and ports in `.env`:
 - `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB`
 - `POSTGRES_PORT`, `PGADMIN_PORT`, `DBT_POSTGRES_PORT`
-- `DBT_HOST_PROJECT_DIR`, `DBT_HOST_PROFILES_FILE`, `DBT_WORKDIR`
+- `DBT_HOST_PROJECT_DIR`, `DBT_HOST_PROFILES_FILE`, `DBT_WORKDIR`, `DBT_SERVER_HOST`
