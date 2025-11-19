@@ -1,3 +1,9 @@
+{{
+    config(
+        materialized = 'table'
+    )
+}}
+
 with order_counts as (
 	select
 		order_hour_of_day,

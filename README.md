@@ -126,6 +126,11 @@ Starts a local web server to view generated documentation in your browser. Acces
 ```bash
 docker container exec --tty --interactive dbt dbt docs serve --project-dir /usr/app/test_dbt_project --host 0.0.0.0
 ```
+Or run the command in detached mode:
+```bash
+docker container exec --detach dbt dbt docs serve --project-dir /usr/app/test_dbt_project --host 0.0.0.0
+```
+
 
 ## Database Access
 
