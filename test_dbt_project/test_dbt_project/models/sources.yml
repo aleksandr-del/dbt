@@ -2,6 +2,11 @@ version: 2
 
 sources:
     - name: raw
+      description: >
+          A publicly available, anonymized collection from Instacart (a U.S. online grocery delivery service).
+          Released in 2017 via Kaggle, it includes over 3 million grocery orders from more than 200,000 users,
+          spanning 4-100 orders per user.
+      database: dbt
       schema: raw
       tables:
           - name: aisles
@@ -9,3 +14,23 @@ sources:
           - name: products
           - name: orders
           - name: order_products
+          - name: test
+            description: "A test table for learning"
+            columns:
+                - name: id
+                  tests:
+                      - unique
+                - name: name
+                  tests:
+                      - not_null
+                - name: loaded_at
+                  tests:
+                      - not_null
+            freshness:
+                error_after:
+                    count: 2
+                    period: hour
+                warn_after:
+                    count: 1
+                    period: hour
+            loaded_at_field: loaded_at

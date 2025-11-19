@@ -131,6 +131,12 @@ Or run the command in detached mode:
 docker container exec --detach dbt dbt docs serve --project-dir /usr/app/test_dbt_project --host 0.0.0.0
 ```
 
+### Check Source Freshness
+Validates that source data is up-to-date based on freshness thresholds defined in sources.yml. Reports warnings or errors if data is stale:
+```bash
+docker container exec --tty --interactive dbt dbt source freshness --project-dir /usr/app/test_dbt_project
+```
+
 
 ## Database Access
 

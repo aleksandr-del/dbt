@@ -64,3 +64,17 @@ COPY raw.order_products
 FROM '/docker-entrypoint-initdb.d/order_products__prior.csv'
 WITH (FORMAT CSV, HEADER, DELIMITER ',')
 ;
+
+CREATE TABLE IF NOT EXISTS raw.test(
+    id serial,
+	name varchar(10),
+	loaded_at timestamp with time zone
+)
+;
+
+INSERT INTO raw.test(name, loaded_at) VALUES
+	('Anna', current_timestamp),
+	('Bob', current_timestamp),
+	('Jessica', current_timestamp),
+	('John', current_timestamp)
+;
