@@ -25,7 +25,7 @@ models:
                 - accepted_values:
                       values: "{{ range(24) | list }}"
           - name: "average_product_count_per_order"
-            description: "Average product count per order by hour of day"
+            description: "Average product count order during each hour"
             tests:
                 - not_null
 
@@ -39,6 +39,35 @@ models:
                 - accepted_values:
                       values: "{{ range(24) | list }}"
           - name: "total_products_by_hour"
-            description: "Total product count by hour of day"
+            description: "Total product count ordered during each hour"
+            tests:
+                - not_null
+
+    - name: order_products_stats_model
+      description: "Combines order and product statistics with rolling aggregations by hour of day"
+      columns:
+          - name: "order_hour_of_day"
+            description: "Hour of the day when order were placed (0-23)"
+            tests:
+                - not_null
+                - unique
+          - name: "order_count"
+            description: "Total number of orders placed during each hour of day"
+            tests:
+                - not_null
+          - name: "rolling_order_count"
+            description: "Cumulative sum of orders from hour 0 to current hour"
+            tests:
+                - not_null
+          - name: "average_product_count_per_order"
+            description: "Average product count ordered during each hour"
+            tests:
+                - not_null
+          - name: "total_products_by_hour"
+            description: "Total product count ordered during each hour"
+            tests:
+                - not_null
+          - name: "rolling_products_count"
+            description: "Cumulative sum of porudcts from hour 0 to current hour"
             tests:
                 - not_null
