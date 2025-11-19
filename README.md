@@ -171,3 +171,20 @@ Configure database connection and ports in `.env`:
 - `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB`
 - `POSTGRES_PORT`, `PGADMIN_PORT`, `DBT_POSTGRES_PORT`
 - `DBT_HOST_PROJECT_DIR`, `DBT_HOST_PROFILES_FILE`, `DBT_WORKDIR`, `DBT_SERVER_PORT`
+
+## Project Overview
+
+As for now this dbt project analyzes order and product data to generate hourly statistics.
+
+### Data Lineage
+
+![dbt Lineage Graph](dbt-dag.png)
+
+The project follows this data flow:
+- **Sources**: Raw order and order_products tables
+- **Staging**: Extracts order hour from timestamps (stg_orders_hour_of_day, stg_order_product_counts)
+- **Intermediate models**:
+  - `order_counts_model`: Order counts by hour
+  - `avg_product_cnt_model`: Average products per order by hour
+  - `total_product_cnt_model`: Total products by hour
+- **Final model**: `order_products_stats_model` combines all metrics with rolling aggregations
