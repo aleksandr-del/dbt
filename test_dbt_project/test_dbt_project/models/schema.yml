@@ -1,15 +1,17 @@
 version: 2
 
+x-tests: &tests
+    - not_null
+    - accepted_values:
+          values: "{{ range(24) | list }}"
+
 models:
     - name: order_counts_model
       description: "Aggregates order counts by hour of day from raw orders data"
       columns:
           - name: "order_hour_of_day"
             description: "Hour of the day when orders were placed (0-23)"
-            tests:
-                - not_null
-                - accepted_values:
-                      values: "{{ range(24) | list }}"
+            tests: *tests
           - name: "order_count"
             description: "Total number of orders placed during each hour of day"
             tests:
@@ -20,10 +22,7 @@ models:
       columns:
           - name: "order_hour_of_day"
             description: "Hour of the day when orders were placed (0-23)"
-            tests:
-                - not_null
-                - accepted_values:
-                      values: "{{ range(24) | list }}"
+            tests: *tests
           - name: "average_product_count_per_order"
             description: "Average product count order during each hour"
             tests:
@@ -34,10 +33,7 @@ models:
       columns:
           - name: "order_hour_of_day"
             description: "Hour of the day when orders were placed (0-23)"
-            tests:
-                - not_null
-                - accepted_values:
-                      values: "{{ range(24) | list }}"
+            tests: *tests
           - name: "total_products_by_hour"
             description: "Total product count ordered during each hour"
             tests:

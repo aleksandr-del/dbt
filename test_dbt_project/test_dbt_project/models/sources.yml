@@ -10,10 +10,52 @@ sources:
       schema: raw
       tables:
           - name: aisles
+            columns:
+                - name: aisle_id
+                  data_type: integer
+                  tests:
+                      - not_null
+                      - unique
+                - name: aisle
+                  data_type: text
           - name: departments
+            columns:
+                - name: department_id
+                  data_type: integer
+                  tests:
+                      - not_null
+                      - unique
+                - name: department
+                  data_type: text
+                  tests:
+                      - unique
+                      - not_null
+
           - name: products
+
           - name: orders
+
           - name: order_products
+            columns:
+                - name: order_id
+                  data_type: integer
+                  tests:
+                      - not_null
+                      - relationships:
+                            field: order_id
+                            to: source('raw', 'orders')
+                - name: product_id
+                  data_type: integer
+                  tests:
+                      - not_null
+                      - relationships:
+                            field: product_id
+                            to: source('raw', 'products')
+                - name: add_to_cart_order
+                  data_type: integer
+                - name: reordered
+                  data_type: integer
+
           - name: test
             description: "A test table for learning"
             columns:
