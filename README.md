@@ -79,6 +79,24 @@ The PostgreSQL container will automatically:
 
 ## dbt Commands
 
+### Install Dependencies
+Installs packages defined in packages.yml (dbt packages, macros, and utilities from dbt Hub or Git). Run this before building models if using external packages:
+```bash
+docker container exec --tty --interactive dbt dbt deps --project-dir /usr/app/test_dbt_project
+```
+
+### Generate Source Template
+Automatically generates a sources.yml file by introspecting database tables. Creates source definitions with columns, data types, and descriptions for all tables in the specified schema. Requires dbt_codegen package:
+```bash
+docker container exec --tty --interactive dbt dbt --quiet run-operation generate_source --args '{"database_name": "dbt", "include_descriptions": True, "schema_name": "raw", "generate_columns": True, "include_data_types": True, "include_database": True, "include_schema": True}' --project-dir /usr/app/test_dbt_project > test_dbt_project/test_dbt_project/models/_sources.yml
+```
+
+### Generate Base Model
+Creates a base model SQL file that selects all columns from a source table. Useful for creating staging models with proper column selection and aliasing. Requires dbt_codegen package:
+```bash
+docker container exec --tty --interactive dbt dbt run-operation generate_base_model --args '{"source_name": "raw", "table_name": "orders"}' --project-dir /usr/app/test_dbt_project
+```
+
 ### Build Models
 Compiles and executes all dbt models, creating tables and views in PostgreSQL according to your model definitions:
 ```bash
