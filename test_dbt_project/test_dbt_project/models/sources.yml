@@ -1,5 +1,9 @@
 version: 2
 
+x-tests: &tests
+    - not_null
+    - unique
+
 sources:
     - name: raw
       description: >
@@ -13,27 +17,43 @@ sources:
             columns:
                 - name: aisle_id
                   data_type: integer
-                  tests:
-                      - not_null
-                      - unique
+                  tests: *tests
                 - name: aisle
                   data_type: text
           - name: departments
             columns:
                 - name: department_id
                   data_type: integer
-                  tests:
-                      - not_null
-                      - unique
+                  tests: *tests
                 - name: department
                   data_type: text
-                  tests:
-                      - unique
-                      - not_null
+                  tests: *tests
 
           - name: products
 
           - name: orders
+            columns:
+                - name: order_id
+                  data_type: integer
+                  tests: *tests
+                - name: user_id
+                  data_type: integer
+                - name: eval_set
+                  data_type: varchar(10)
+                  tests:
+                      - accepted_values:
+                            values: ["test", "prior", "train"]
+                - name: order_number
+                  data_type: integer
+                - name: order_dow
+                  data_type: integer
+                - name: order_hour_of_day
+                  data_type: integer
+                  tests:
+                      - accepted_values:
+                            values: "{{ range(24) | list}}"
+                - name: days_since_prior_order
+                  data_type: numeric
 
           - name: order_products
             columns:
