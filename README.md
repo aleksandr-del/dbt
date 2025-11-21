@@ -108,9 +108,13 @@ Executes all configured data quality tests (uniqueness, null checks, data consis
 ```bash
 docker container exec --tty --interactive dbt dbt test --project-dir /usr/app/test_dbt_project
 ```
-Or execute singalar (custom) tests:
+Or execute singular (custom) tests:
 ```bash
 docker container exec --tty --interactive dbt dbt test --project-dir /usr/app/test_dbt_project --select 'test_type:singular'
+```
+Or execute data quality tests on sources:
+```bash
+docker container exec --tty --interactive dbt dbt test --project-dir /usr/app/test_dbt_project --select source:raw
 ```
 
 ### Full Refresh
