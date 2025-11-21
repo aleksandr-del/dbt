@@ -108,6 +108,10 @@ Executes all configured data quality tests (uniqueness, null checks, data consis
 ```bash
 docker container exec --tty --interactive dbt dbt test --project-dir /usr/app/test_dbt_project
 ```
+Or execute singalar (custom) tests:
+```bash
+docker container exec --tty --interactive dbt dbt test --project-dir /usr/app/test_dbt_project --select 'test_type:singular'
+```
 
 ### Full Refresh
 Drops and recreates all tables/materialized views instead of incremental updates. Useful after major model changes:
