@@ -67,3 +67,44 @@ models:
             description: "Cumulative sum of porudcts from hour 0 to current hour"
             tests:
                 - not_null
+
+    - name: stg_order_department_hour_of_day
+      description: "Combines orders with departments from where the products were bought"
+      columns:
+          - name: order_id
+            description: "Unique order identificator"
+            tests:
+                - not_null
+                - relationships:
+                      field: order_id
+                      to: source('raw', 'orders')
+          - name: order_hour_of_day
+            description: "Hour of the day when order were placed (0-23)"
+            tests: *tests
+          - name: department
+            description: "The name of the department from where a product was bought"
+            tests:
+                - not_null
+                - relationships:
+                      field: department
+                      to: source('raw', 'departments')
+
+    - name: order_department_count_model
+      description: "Counts how many products were bought from departments for each order"
+      columns:
+          - name: order_id
+            description: "Unique order identifier"
+          - name: order_hour_of_day
+            description: "Hour of the day when order were placed (0-23)"
+            tests: *tests
+          - name: department
+            description: "The name of the department from where a product was bought"
+          - name: product_cnt
+            description: "A number of proucts bought from a department for each order"
+
+    - name: department_stats_model
+      description: '{{ doc("department_stats_mart") }}'
+      columns:
+          - name: order_hour_of_day
+            description: "Hour of the day when order were placed (0-23)"
+            tests: *tests
