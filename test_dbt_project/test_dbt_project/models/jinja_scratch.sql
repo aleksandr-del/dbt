@@ -38,3 +38,14 @@ This is a comment!
     {%- endif -%}
     My delicious {{ food }} is my favorite {{ food_type }}
 {% endfor %}
+
+{% set departments = get_unique_values('raw', 'departments', 'department') %}
+{{ departments }}
+
+{% set values = dbt_utils.get_column_values(table=source('raw', 'departments'), column='department') %}
+Values: {{ values }}
+
+
+{{ codegen.generate_model_yaml(model_names=['department_stats_model']) }}
+
+{{ dbt_utils.date_spine(datepart="day", start_date="cast('2025-11-01' as date)", end_date="cast('2025-11-30' as date)") }}

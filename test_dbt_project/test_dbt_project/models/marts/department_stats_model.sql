@@ -1,12 +1,4 @@
-{%- set query -%}
-    select distinct department from {{ source('raw', 'departments') }}
-{%- endset -%}
-{%- set result = run_query(query) -%}
-{%- if result -%}
-    {%- set departments = result.columns[0].values() -%}
-{%- else -%}
-    {%- set departments = [] -%}
-{%- endif -%}
+{% set departments = get_unique_values('raw', 'departments', 'department') %}
 
 with department_stats as (
     select

@@ -1,0 +1,17 @@
+macros:
+    - name: get_unique_values
+      description: "A macro that returns unique values of a column of a source table"
+      arguments:
+          - name: source_name
+            description: "The name of the source"
+            type: varchar
+          - name: source_table
+            description: "The name of the source table"
+            type: varchar
+          - name: column_name
+            description: "The name of the column"
+            type: varchar
+      returns: "A list of unique values"
+      examples:
+          - description: "Returns a list of unique department names from raw.departments"
+            code: "get_unique_values('raw', 'departments', 'department')"
