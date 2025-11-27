@@ -25,3 +25,10 @@ macros:
       - name: username
         description: "The name of the user being granted all privileges. Default: {{ target.user }}"
         type: string
+
+  - name: union_all
+    description: "A test macros that uses `union all` and counts orders placed in each department"
+    arguments:
+      - name: table
+        description: "The name of the table that has orders for each department."
+        type: string

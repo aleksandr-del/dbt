@@ -108,3 +108,16 @@ models:
       - name: order_hour_of_day
         description: "Hour of the day when order were placed (0-23)"
         tests: *tests
+
+  - name: orders_by_department_stats_model
+    description: "Counts how many orders were made in each departments"
+    columns:
+      - name: department
+        description: "The name of the department where orders were made"
+        data_type: character varying
+        tests:
+          - not_null
+          - unique
+      - name: total_orders_cnt
+        data_type: bigint
+        description: "Number of orders that were made in each department"

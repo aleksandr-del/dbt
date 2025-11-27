@@ -51,3 +51,12 @@ Values: {{ values }}
 {{ dbt_utils.date_spine(datepart="day", start_date="cast('2025-11-01' as date)", end_date="cast('2025-11-30' as date)") }}
 
 {{ target.user }} {{ target.schema }}
+
+{#
+{{ scratch_macro() }}
+#}
+
+{% set relations =  dbt_utils.get_relations_by_prefix(schema=target.schema, prefix='stg_') %}
+{% for table in relations %}
+    {{ table.identifier }}
+{% endfor %}
