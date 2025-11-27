@@ -14,3 +14,9 @@ Note: Department columns are created at compile time and will update
 when new departments are added to the source data (requires recompilation).
 
 {% enddocs%}
+
+{% docs grant_privileges %}
+
+A macro that grants all privileges on all tables and views in a schema to a user
+
+{% enddocs %}

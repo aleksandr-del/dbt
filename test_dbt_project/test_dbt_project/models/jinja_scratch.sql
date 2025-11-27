@@ -49,3 +49,5 @@ Values: {{ values }}
 {{ codegen.generate_model_yaml(model_names=['department_stats_model']) }}
 
 {{ dbt_utils.date_spine(datepart="day", start_date="cast('2025-11-01' as date)", end_date="cast('2025-11-30' as date)") }}
+
+{{ target.user }} {{ target.schema }}

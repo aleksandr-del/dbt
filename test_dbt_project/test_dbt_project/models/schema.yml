@@ -1,110 +1,110 @@
 version: 2
 
 x-tests: &tests
-    - not_null
-    - accepted_values:
-          values: "{{ range(24) | list }}"
+  - not_null
+  - accepted_values:
+      values: "{{ range(24) | list }}"
 
 models:
-    - name: order_counts_model
-      description: "Aggregates order counts by hour of day from raw orders data"
-      columns:
-          - name: "order_hour_of_day"
-            description: "Hour of the day when orders were placed (0-23)"
-            tests: *tests
-          - name: "order_count"
-            description: "Total number of orders placed during each hour of day"
-            tests:
-                - not_null
+  - name: order_counts_model
+    description: "Aggregates order counts by hour of day from raw orders data"
+    columns:
+      - name: "order_hour_of_day"
+        description: "Hour of the day when orders were placed (0-23)"
+        tests: *tests
+      - name: "order_count"
+        description: "Total number of orders placed during each hour of day"
+        tests:
+          - not_null
 
-    - name: avg_product_cnt_model
-      description: "Average product counts per order by hour of day from raw orders and order_product data"
-      columns:
-          - name: "order_hour_of_day"
-            description: "Hour of the day when orders were placed (0-23)"
-            tests: *tests
-          - name: "average_product_count_per_order"
-            description: "Average product count order during each hour"
-            tests:
-                - not_null
+  - name: avg_product_cnt_model
+    description: "Average product counts per order by hour of day from raw orders and order_product data"
+    columns:
+      - name: "order_hour_of_day"
+        description: "Hour of the day when orders were placed (0-23)"
+        tests: *tests
+      - name: "average_product_count_per_order"
+        description: "Average product count order during each hour"
+        tests:
+          - not_null
 
-    - name: total_product_cnt_model
-      description: "Total product counts by hour of day from raw data orders and order_product data"
-      columns:
-          - name: "order_hour_of_day"
-            description: "Hour of the day when orders were placed (0-23)"
-            tests: *tests
-          - name: "total_products_by_hour"
-            description: "Total product count ordered during each hour"
-            tests:
-                - not_null
+  - name: total_product_cnt_model
+    description: "Total product counts by hour of day from raw data orders and order_product data"
+    columns:
+      - name: "order_hour_of_day"
+        description: "Hour of the day when orders were placed (0-23)"
+        tests: *tests
+      - name: "total_products_by_hour"
+        description: "Total product count ordered during each hour"
+        tests:
+          - not_null
 
-    - name: order_products_stats_model
-      description: "Combines order and product statistics with rolling aggregations by hour of day"
-      columns:
-          - name: "order_hour_of_day"
-            description: "Hour of the day when order were placed (0-23)"
-            tests:
-                - not_null
-                - unique
-          - name: "order_count"
-            description: "Total number of orders placed during each hour of day"
-            tests:
-                - not_null
-          - name: "rolling_order_count"
-            description: "Cumulative sum of orders from hour 0 to current hour"
-            tests:
-                - not_null
-          - name: "average_product_count_per_order"
-            description: "Average product count ordered during each hour"
-            tests:
-                - not_null
-          - name: "total_products_by_hour"
-            description: "Total product count ordered during each hour"
-            tests:
-                - not_null
-          - name: "rolling_products_count"
-            description: "Cumulative sum of porudcts from hour 0 to current hour"
-            tests:
-                - not_null
+  - name: order_products_stats_model
+    description: "Combines order and product statistics with rolling aggregations by hour of day"
+    columns:
+      - name: "order_hour_of_day"
+        description: "Hour of the day when order were placed (0-23)"
+        tests:
+          - not_null
+          - unique
+      - name: "order_count"
+        description: "Total number of orders placed during each hour of day"
+        tests:
+          - not_null
+      - name: "rolling_order_count"
+        description: "Cumulative sum of orders from hour 0 to current hour"
+        tests:
+          - not_null
+      - name: "average_product_count_per_order"
+        description: "Average product count ordered during each hour"
+        tests:
+          - not_null
+      - name: "total_products_by_hour"
+        description: "Total product count ordered during each hour"
+        tests:
+          - not_null
+      - name: "rolling_products_count"
+        description: "Cumulative sum of porudcts from hour 0 to current hour"
+        tests:
+          - not_null
 
-    - name: stg_order_department_hour_of_day
-      description: "Combines orders with departments from where the products were bought"
-      columns:
-          - name: order_id
-            description: "Unique order identificator"
-            tests:
-                - not_null
-                - relationships:
-                      field: order_id
-                      to: source('raw', 'orders')
-          - name: order_hour_of_day
-            description: "Hour of the day when order were placed (0-23)"
-            tests: *tests
-          - name: department
-            description: "The name of the department from where a product was bought"
-            tests:
-                - not_null
-                - relationships:
-                      field: department
-                      to: source('raw', 'departments')
+  - name: stg_order_department_hour_of_day
+    description: "Combines orders with departments from where the products were bought"
+    columns:
+      - name: order_id
+        description: "Unique order identificator"
+        tests:
+          - not_null
+          - relationships:
+              field: order_id
+              to: source('raw', 'orders')
+      - name: order_hour_of_day
+        description: "Hour of the day when order were placed (0-23)"
+        tests: *tests
+      - name: department
+        description: "The name of the department from where a product was bought"
+        tests:
+          - not_null
+          - relationships:
+              field: department
+              to: source('raw', 'departments')
 
-    - name: order_department_count_model
-      description: "Counts how many products were bought from departments for each order"
-      columns:
-          - name: order_id
-            description: "Unique order identifier"
-          - name: order_hour_of_day
-            description: "Hour of the day when order were placed (0-23)"
-            tests: *tests
-          - name: department
-            description: "The name of the department from where a product was bought"
-          - name: product_cnt
-            description: "A number of proucts bought from a department for each order"
+  - name: order_department_count_model
+    description: "Counts how many products were bought from departments for each order"
+    columns:
+      - name: order_id
+        description: "Unique order identifier"
+      - name: order_hour_of_day
+        description: "Hour of the day when order were placed (0-23)"
+        tests: *tests
+      - name: department
+        description: "The name of the department from where a product was bought"
+      - name: product_cnt
+        description: "A number of proucts bought from a department for each order"
 
-    - name: department_stats_model
-      description: '{{ doc("department_stats_mart") }}'
-      columns:
-          - name: order_hour_of_day
-            description: "Hour of the day when order were placed (0-23)"
-            tests: *tests
+  - name: department_stats_model
+    description: '{{ doc("department_stats_mart") }}'
+    columns:
+      - name: order_hour_of_day
+        description: "Hour of the day when order were placed (0-23)"
+        tests: *tests

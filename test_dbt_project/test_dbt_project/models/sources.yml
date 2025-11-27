@@ -1,95 +1,95 @@
 version: 2
 
 x-tests: &tests
-    - not_null
-    - unique
+  - not_null
+  - unique
 
 sources:
-    - name: raw
-      description: '{{ doc("instacart_tables") }}'
-      database: dbt
-      schema: raw
-      tables:
-          - name: aisles
-            columns:
-                - name: aisle_id
-                  data_type: integer
-                  tests: *tests
-                - name: aisle
-                  data_type: text
-          - name: departments
-            columns:
-                - name: department_id
-                  data_type: integer
-                  tests: *tests
-                - name: department
-                  data_type: text
-                  tests: *tests
+  - name: raw
+    description: '{{ doc("instacart_tables") }}'
+    database: dbt
+    schema: raw
+    tables:
+      - name: aisles
+        columns:
+          - name: aisle_id
+            data_type: integer
+            tests: *tests
+          - name: aisle
+            data_type: text
+      - name: departments
+        columns:
+          - name: department_id
+            data_type: integer
+            tests: *tests
+          - name: department
+            data_type: text
+            tests: *tests
 
-          - name: products
+      - name: products
 
-          - name: orders
-            columns:
-                - name: order_id
-                  data_type: integer
-                  tests: *tests
-                - name: user_id
-                  data_type: integer
-                - name: eval_set
-                  data_type: varchar(10)
-                  tests:
-                      - accepted_values:
-                            values: ["test", "prior", "train"]
-                - name: order_number
-                  data_type: integer
-                - name: order_dow
-                  data_type: integer
-                - name: order_hour_of_day
-                  data_type: integer
-                  tests:
-                      - accepted_values:
-                            values: "{{ range(24) | list}}"
-                - name: days_since_prior_order
-                  data_type: numeric
+      - name: orders
+        columns:
+          - name: order_id
+            data_type: integer
+            tests: *tests
+          - name: user_id
+            data_type: integer
+          - name: eval_set
+            data_type: varchar(10)
+            tests:
+              - accepted_values:
+                  values: ["test", "prior", "train"]
+          - name: order_number
+            data_type: integer
+          - name: order_dow
+            data_type: integer
+          - name: order_hour_of_day
+            data_type: integer
+            tests:
+              - accepted_values:
+                  values: "{{ range(24) | list}}"
+          - name: days_since_prior_order
+            data_type: numeric
 
-          - name: order_products
-            columns:
-                - name: order_id
-                  data_type: integer
-                  tests:
-                      - not_null
-                      - relationships:
-                            field: order_id
-                            to: source('raw', 'orders')
-                - name: product_id
-                  data_type: integer
-                  tests:
-                      - not_null
-                      - relationships:
-                            field: product_id
-                            to: source('raw', 'products')
-                - name: add_to_cart_order
-                  data_type: integer
-                - name: reordered
-                  data_type: integer
+      - name: order_products
+        columns:
+          - name: order_id
+            data_type: integer
+            tests:
+              - not_null
+              - relationships:
+                  field: order_id
+                  to: source('raw', 'orders')
+          - name: product_id
+            data_type: integer
+            tests:
+              - not_null
+              - relationships:
+                  field: product_id
+                  to: source('raw', 'products')
+          - name: add_to_cart_order
+            data_type: integer
+          - name: reordered
+            data_type: integer
 
-          - name: test
-            description: "A test table for learning"
-            columns:
-                - name: id
-                  tests:
-                      - unique
-                - name: name
-                  tests:
-                      - not_null
-                - name: loaded_at
-                  tests:
-                      - not_null
-            freshness:
-                error_after:
-                    count: 2
-                    period: hour
-                warn_after:
-                    count: 1
-                    period: hour
-            loaded_at_field: loaded_at
+      - name: test
+        description: "A test table for learning"
+        columns:
+          - name: id
+            tests:
+              - unique
+          - name: name
+            tests:
+              - not_null
+          - name: loaded_at
+            tests:
+              - not_null
+        freshness:
+          error_after:
+            count: 2
+            period: hour
+          warn_after:
+            count: 1
+            period: hour
+        loaded_at_field: loaded_at
