@@ -60,3 +60,6 @@ Values: {{ values }}
 {% for table in relations %}
     {{ table.identifier }}
 {% endfor %}
+
+{% set var = env_var('DBT_SCHEMA', target.schema) %}
+{{ var }}
