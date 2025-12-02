@@ -121,3 +121,21 @@ models:
       - name: total_orders_cnt
         data_type: bigint
         description: "Number of orders that were made in each department"
+
+  - name: stg_incremental_orders
+    description: "Incremental model that sources from raw.orders table"
+    columns:
+      - name: order_id
+        data_type: integer
+        description: "Unique order id"
+        tests:
+          - not_null
+          - unique
+
+      - name: user_id
+        data_type: integer
+        description: "User id"
+
+      - name: order_number
+        data_type: smallint
+        description: "Unique order number for each user id"
