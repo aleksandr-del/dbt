@@ -1,0 +1,11 @@
+seeds:
+  - name: dow
+    description: "A seed file containing the names of each week day and its number"
+    columns:
+      - name: day_number
+        description: "The number of the week day"
+        tests:
+          - accepted_values:
+              values: "{{ range(7) | list }}"
+      - name: day_name
+        description: "The name of the week day"
