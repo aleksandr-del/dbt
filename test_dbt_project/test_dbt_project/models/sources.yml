@@ -48,7 +48,7 @@ sources:
             data_type: integer
             tests:
               - accepted_values:
-                  values: "{{ range(24) | list}}"
+                  values: "{{ range(24) | list }}"
           - name: days_since_prior_order
             data_type: numeric
 

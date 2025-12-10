@@ -116,6 +116,10 @@ Or execute data quality tests on sources:
 ```bash
 docker container exec --tty --interactive dbt dbt test --project-dir /usr/app/test_dbt_project --select source:raw
 ```
+Or run tests with failure storage - stores failed test results in a new schema that dbt creates in the database for inspection:
+```bash
+docker container exec --tty --interactive dbt dbt test --project-dir /usr/app/test_dbt_project --select example.* --store-failures
+```
 
 ### Full Refresh
 Drops and recreates all tables/materialized views instead of incremental updates. Useful after major model changes:

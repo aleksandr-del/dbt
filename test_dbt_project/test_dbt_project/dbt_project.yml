@@ -34,6 +34,7 @@ models:
     intermediate:
       +materialized: table
     marts:
+      +required_tests: { "unique.*|not_null": 1 }
       +materialized: table
     # Config indicated by + and applies to all files under models/example/
     example:
