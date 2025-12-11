@@ -51,6 +51,8 @@ models:
         description: "Total number of orders placed during each hour of day"
         tests:
           - not_null
+          - assert_column_is_greater_than_value:
+              value: 10000
       - name: "rolling_order_count"
         description: "Cumulative sum of orders from hour 0 to current hour"
         tests:

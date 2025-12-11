@@ -61,5 +61,18 @@ Values: {{ values }}
     {{ table.identifier }}
 {% endfor %}
 
-{% set var = env_var('DBT_SCHEMA', target.schema) %}
+{% set var = env_var('DBT_WORKDIR', target.schema) %}
 {{ var }}
+
+{% set query %}
+    select
+        min(order_count) min_order_count,
+        max(order_count) max_order_count
+    from {{ ref('order_counts_model') }}
+{% endset %}
+{% if execute %}
+    {% set result = dbt_utils.get_query_results_as_dict(query) %}
+    {% set min_order_count = result['min_order_count'][0] %}
+    {% set max_order_count = result['max_order_count'][0] %}
+{% endif %}
+{{ min_order_count, max_order_count }}
