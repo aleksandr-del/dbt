@@ -76,3 +76,13 @@ Values: {{ values }}
     {% set max_order_count = result['max_order_count'][0] %}
 {% endif %}
 {{ min_order_count, max_order_count }}
+
+
+{% set old_relation = source('raw', 'orders') -%}
+{% set dbt_relation = ref('stg_orders_hour_of_day') %}
+{{ audit_helper.compare_and_classify_relation_rows(
+    a_relation = old_relation,
+    b_relation = dbt_relation,
+    primary_key_columns = ["order_id"],
+    columns = None
+) }}

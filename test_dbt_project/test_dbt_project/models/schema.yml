@@ -53,6 +53,10 @@ models:
           - not_null
           - assert_column_is_greater_than_value:
               value: 10000
+          - dbt_utils.expression_is_true:
+              expression: ">= 50000"
+              config:
+                where: "order_hour_of_day >= 7"
       - name: "rolling_order_count"
         description: "Cumulative sum of orders from hour 0 to current hour"
         tests:
@@ -141,3 +145,42 @@ models:
       - name: order_number
         data_type: smallint
         description: "Unique order number for each user id"
+
+  - name: stg_orders_hour_of_day
+    description: "A staging view from a source table 'orders'"
+    columns:
+      - name: order_id
+        data_type: integer
+        description: "Unique order identificator"
+        tests:
+          - unique
+          - not_null
+
+      - name: order_hour_of_day
+        data_type: smallint
+        description: "Hour of the day when an order was placed"
+        tests: *tests
+
+  - name: stg_order_product_counts
+    description: "Counts how many products were bought with each order"
+    columns:
+      - name: order_id
+        data_type: integer
+        description: "Unique order identificator"
+        tests:
+          - unique
+          - not_null
+          - relationships:
+              field: order_id
+              to: source('raw', 'orders')
+
+      - name: product_count
+        data_type: bigint
+        description: "Number of products by each order"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: ">= 1"
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 1
+              max_value: 100

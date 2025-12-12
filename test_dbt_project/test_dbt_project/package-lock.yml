@@ -4,5 +4,11 @@ packages:
   - package: tnightengale/dbt_meta_testing
     version: 0.3.6
   - package: dbt-labs/dbt_utils
-    version: 1.3.2
-sha1_hash: 6f685e3f738daf3e85b8eb685f42cfce6eb59391
+    version: 1.3.3
+  - package: metaplane/dbt_expectations
+    version: 0.10.10
+  - package: dbt-labs/audit_helper
+    version: 0.12.2
+  - package: godatadriven/dbt_date
+    version: 0.15.0
+sha1_hash: d0125898d056585a87c4e89085b183f6d5181bbb
