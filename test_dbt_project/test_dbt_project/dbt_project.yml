@@ -39,3 +39,8 @@ models:
     # Config indicated by + and applies to all files under models/example/
     example:
       +materialized: view
+
+tests:
+  test_dbt_project:
+    +store_failures: false
+    +limit: 5

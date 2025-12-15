@@ -86,3 +86,18 @@ Values: {{ values }}
     primary_key_columns = ["order_id"],
     columns = None
 ) }}
+
+{% if execute %}
+    {% set relations_to_drop =  dbt_utils.get_relations_by_pattern(
+        schema_pattern='public_dbt_test__audit',
+        table_pattern='%'
+    ) %}
+    {% set drop_queries = [] %}
+    {% for relation in relations_to_drop %}
+    {% set drop_command %}
+        drop {{ relation.type }} if exists {{ relation }};
+    {% endset %}
+    {% do drop_queries.append(drop_command) %}
+    {% endfor %}
+{% endif %}
+{{ drop_queries }}

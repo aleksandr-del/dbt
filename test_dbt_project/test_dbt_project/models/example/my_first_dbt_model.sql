@@ -11,9 +11,12 @@
 
 with source_data as (
 
-    select 1 as id
-    union all
-    select null as id
+    {% for id in range(1, 22)  %}
+        select {{ id }} as id
+        union all
+        select null as id
+        {% if not loop.last %}union all{% endif %}
+    {% endfor %}
 
 )
 
